@@ -4,7 +4,7 @@ const path = require('path');
 
 async function sqliteConnection() {
     const database = await sqlite.open({
-        filename: '/mnt/sqlite-db/database.db', // Caminho no disco EBS
+        filename: '/mnt/database/database.db', // Caminho no disco EBS
         driver: sqlite3.Database
     });
     
