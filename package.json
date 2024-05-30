@@ -17,9 +17,9 @@
     "sqlite3": "^5.1.7"
   },
   "scripts": {
-    "start": "knex migrate:latest && pm2-runtime start ecosystem.config.js --env production",
+    "start": "pm2-runtime start ecosystem.config.js --env production",
     "dev": "nodemon ./src/server.js",
-    "migrate": "knex migrate:latest"
+    "migrate": "knex migrate:latest && npm install"
   },
   "name": "kanban",
   "version": "1.0.0",
