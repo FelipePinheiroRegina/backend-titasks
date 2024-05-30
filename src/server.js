@@ -34,5 +34,5 @@ app.use((error, req, res, next) => {
     })
 })
 
-const PORT = process.env.PORT || 3333
+const PORT = process.env.PORT || 443
 app.listen(PORT, () => console.log('server is running on port', + PORT))
