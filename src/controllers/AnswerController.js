@@ -30,7 +30,7 @@ class AnswerController {
             prints, 
             user_id,
             task_id,
-            "created_at": knex.raw("datetime('now', 'localtime')"),
+            "created_at": knex.raw("CURRENT_TIMESTAMP"),
             "name": user.name,
             "avatar_user_answer": user.avatar
         })
@@ -39,28 +39,35 @@ class AnswerController {
     }
 
     async index(req, res) {
-        const { id } = req.params
-        const user_id = req.user.id
-
-        
-        let response = await knex('answer').select([
-            "users.name",
-            "users.email",
-            "users.avatar",
-            "answer.*"
-        ])
-        .where('task_id', id)
-        .groupBy('answer')
-        .innerJoin('users', 'users.id', 'answer.user_id')
-        .orderBy('created_at')
-
-        const formatDateAnswer = response.map(answer => ({
-            ...answer,
-            created_at: format(new Date(answer.created_at), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' })
-        }))
-
-        return res.json(formatDateAnswer)
+        const { id } = req.params;
+        const user_id = req.user.id;
+    
+        try {
+            let response = await knex('answer')
+                .select([
+                    "users.name",
+                    "users.email",
+                    "users.avatar",
+                    "answer.*"
+                ])
+                .where('task_id', id)
+                .innerJoin('users', 'users.id', 'answer.user_id')
+                .orderBy('answer.created_at'); // Corrigindo o nome da coluna
+    
+            // Não é mais necessário o uso do GROUP BY
+    
+            const formatDateAnswer = response.map(answer => ({
+                ...answer,
+                created_at: format(new Date(answer.created_at), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' })
+            }));
+    
+            return res.json(formatDateAnswer);
+        } catch (error) {
+            console.error('Erro ao buscar respostas:', error);
+            return res.status(500).json({ error: 'Erro ao buscar respostas' });
+        }
     }
+    
 }
 
 module.exports = AnswerController

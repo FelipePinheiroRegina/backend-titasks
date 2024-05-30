@@ -23,7 +23,7 @@ class TasksController{
                 deadline,
                 status,
                 user_id,
-                created_at: knex.raw("datetime('now', 'localtime')"),
+                created_at: knex.raw("CURRENT_TIMESTAMP"),
                 image
             });
     
@@ -143,7 +143,7 @@ class TasksController{
         await knex("tasks").where({ id })
         .update({
             "status": status,
-            "updated_at": knex.raw("datetime('now', 'localtime')" )
+            "updated_at": knex.raw("CURRENT_TIMESTAMP")
         })
 
         return res.json({msg: "Update successfully"})

@@ -1,14 +1,20 @@
-const path = require('path')
+const path = require('path');
+require('dotenv').config()
 
 module.exports = {
     development: {
-        client: 'sqlite3',
+        client: 'postgres',
         connection: {
-            filename: '/mnt/database/database.db' 
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE,
+            
         },
 
         pool: {
-            afterCreate: (conn, cb) => conn.run('PRAGMA foreign_keys = ON', cb)
+            min: 2,
+            max: 10
         },
 
         migrations: {
@@ -17,4 +23,4 @@ module.exports = {
 
         useNullAsDefault: true
     }
-}
+};
