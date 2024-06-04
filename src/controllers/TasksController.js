@@ -23,7 +23,7 @@ class TasksController{
                 deadline,
                 status,
                 user_id,
-                created_at: knex.raw("CURRENT_TIMESTAMP"),
+                "created_at": knex.raw("datetime('now', 'localtime')"),
                 image
             });
     
