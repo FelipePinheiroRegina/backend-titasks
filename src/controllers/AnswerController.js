@@ -30,7 +30,7 @@ class AnswerController {
             prints, 
             user_id,
             task_id,
-            "created_at": knex.raw("CURRENT_TIMESTAMP"),
+            "created_at": knex.raw("datetime('now', 'localtime')"),
             "name": user.name,
             "avatar_user_answer": user.avatar
         })
@@ -52,9 +52,7 @@ class AnswerController {
                 ])
                 .where('task_id', id)
                 .innerJoin('users', 'users.id', 'answer.user_id')
-                .orderBy('answer.created_at'); // Corrigindo o nome da coluna
-    
-            // Não é mais necessário o uso do GROUP BY
+                .orderBy('answer.created_at'); 
     
             const formatDateAnswer = response.map(answer => ({
                 ...answer,

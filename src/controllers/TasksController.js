@@ -32,56 +32,57 @@ class TasksController{
     
     
     async index(req, res) {
-        const { title, status } = req.query;
-
-        let response;
-
+        const { title, status, date } = req.query;
+        
         // Definindo a consulta base
         let query = knex('tasks')
-            .select([
-                "tasks.id",
-                "users.name",
-                "users.avatar",
-                "tasks.title",
-                "tasks.description",
-                "tasks.status",
-                "tasks.created_at",
-                "tasks.deadline",
-                "tasks.updated_at",
-                "tasks.image"
-            ])
-            .innerJoin("users", "users.id", "tasks.user_id");
-
+          .select([
+            "tasks.id",
+            "users.name",
+            "users.avatar",
+            "tasks.title",
+            "tasks.description",
+            "tasks.status",
+            "tasks.created_at",
+            "tasks.deadline",
+            "tasks.updated_at",
+            "tasks.image"
+          ])
+          .innerJoin("users", "users.id", "tasks.user_id")
+      
         // Aplicando filtros conforme os parâmetros recebidos
         if (status) {
-            query = query.where('tasks.status', status);
+          query = query.where('tasks.status', status);
         }
         if (title) {
-            query = query.whereLike('tasks.title', `%${title}%`);
+          query = query.whereLike('tasks.title', `%${title}%`);
         }
 
+        if (date) {
+            query = query.whereLike('tasks.created_at', `%${date}%`);
+        }
+      
+        // Aplicando a ordenação por 'created_at' em ordem decrescente
+        query = query.orderBy('tasks.created_at', 'desc');
+      
         // Executando a consulta
-        response = await query;
-
+        const response = await query;
+      
         // Converta as datas para o fuso horário de Brasília e obtenha os nomes dos usuários de resposta
         const formattedResponse = response.map(task => {
-            if(task.updated_at) {
-                return {
-                    ...task,
-                    created_at: format(new Date(task.created_at), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' }),
-                    deadline: format(new Date(task.deadline), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' }),
-                    updated_at: format(new Date(task.updated_at), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' })
-                };
-
-            } else {
-                return {
-                    ...task,
-                    created_at: format(new Date(task.created_at), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' }),
-                    deadline: format(new Date(task.deadline), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' })
-                }
-            }  
-        })
-
+          const formattedTask = {
+            ...task,
+            created_at: format(new Date(task.created_at), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' }),
+            deadline: format(new Date(task.deadline), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' })
+          };
+      
+          if (task.updated_at) {
+            formattedTask.updated_at = format(new Date(task.updated_at), "dd/MM/yyyy 'às' HH:mm:ss", { timeZone: 'America/Sao_Paulo' });
+          }
+      
+          return formattedTask;
+        });
+      
         return res.json(formattedResponse);
     }
 
@@ -143,7 +144,7 @@ class TasksController{
         await knex("tasks").where({ id })
         .update({
             "status": status,
-            "updated_at": knex.raw("CURRENT_TIMESTAMP")
+            "updated_at": knex.raw("datetime('now', 'localtime')"),
         })
 
         return res.json({msg: "Update successfully"})
