@@ -1,5 +1,6 @@
 const multer = require("multer")
 const uploadConfig = require("../configs/upload")
+const upload = multer(uploadConfig.MULTER)
 
 const { Router } = require('express')
 const userRoutes = Router()
@@ -8,7 +9,6 @@ const UserController = require('../controllers/UserController')
 const userController = new UserController()
 
 const ensureAuth = require("../middlewares/ensureAuth")
-const upload = multer(uploadConfig.MULTER)
 
 const UserAvatarController = require("../controllers/UserAvatarController")
 const userAvatarController = new UserAvatarController()

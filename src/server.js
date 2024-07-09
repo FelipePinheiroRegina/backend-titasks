@@ -1,5 +1,6 @@
 require('express-async-errors')
 require('dotenv').config()
+require('./jobs/checkScheduledAccounts.js');
 
 const express = require('express')
 const routes = require('./routes')
@@ -35,4 +36,4 @@ app.use((error, req, res, next) => {
 })
 
 const PORT = process.env.PORT
-app.listen(PORT, () => console.log('server is running on port', + PORT))
+app.listen(PORT, '0.0.0.0', () => console.log('server is running on port', + PORT))
