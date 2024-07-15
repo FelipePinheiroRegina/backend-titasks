@@ -13,9 +13,9 @@ tasksRoutes.use(ensureAuth)
 
 tasksRoutes.post('/image', upload.single("image"), tasksController.create)
 
-tasksRoutes.get('/:yourself', tasksController.index)
 tasksRoutes.get('/:id', tasksController.show)
 
+tasksRoutes.get('/', tasksController.index)
 
 tasksRoutes.put('/:id', tasksController.update)
 

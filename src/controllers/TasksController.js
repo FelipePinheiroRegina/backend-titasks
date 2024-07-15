@@ -31,14 +31,13 @@ class TasksController {
     }
     
     async index(req, res) {
-        let { title, status, date } = req.query;
-        const { yourself } = req.params
+        let { title, status, date, mytasks } = req.query;
         const user_id = req.user.id
         
         if(status === 'Todas') {
             status = undefined
         }
-
+        
         // Definindo a consulta base
         let query = knex('tasks')
           .select([
@@ -67,17 +66,57 @@ class TasksController {
         if (date) {
             query = query.whereLike('tasks.created_at', `%${date}%`);
         }
-      
+
+        if(mytasks === 'true') {
+            query = query.where('tasks.user_id', user_id)
+        }
+
         // Aplicando a ordenação por 'created_at' em ordem decrescente
         query = query.orderBy('tasks.created_at', 'desc');
 
-        if ( yourself == 'true') {
-            query = query.where({ user_id })
-        }
-      
+        // Contando todas as tasks da tabela
+        
+        const [countAllTasks] = await knex('tasks')
+        .count('* as total')
+
+        const [countAllTasksDo] = await knex('tasks')
+        .count('* as fazer')
+        .where('status', 'Fazer')
+
+        const [countAllTasksDoing] = await knex('tasks')
+        .count('* as fazendo')
+        .where('status', 'Fazendo')
+
+        const [countAllTasksDone] = await knex('tasks')
+        .count('* as feito')
+        .where('status', 'Feito')
+        // =====================================================
+
+
+        // Contando apenas as tasks do usuario
+        const [ countAllTasks_user_id ] = await knex('tasks')
+        .count('* as total')
+        .where('tasks.user_id', user_id)
+
+         
+        const [ countAllTasksDo_user_id ] = await knex('tasks')
+        .count('* as fazer')
+        .where('tasks.user_id', user_id).where('status', 'Fazer')
+
+        
+        const [ countAllTasksDoing_user_id ] = await knex('tasks')
+        .count('* as fazendo')
+        .where('tasks.user_id', user_id).where('status', 'Fazendo')
+
+        
+        const [ countAllTasksDone_user_id ] = await knex('tasks')
+        .count('* as feito')
+        .where('tasks.user_id', user_id).where('status', 'Feito')
+        // =======================================================
+
         // Executando a consulta
-        const response = await query;
-      
+        const response = await query
+        
         // Converta as datas para o fuso horário de Brasília e obtenha os nomes dos usuários de resposta
         const formattedResponse = response.map(task => {
           const formattedTask = {
@@ -93,15 +132,26 @@ class TasksController {
           return formattedTask;
         });
       
-        return res.json(formattedResponse);
+        return res.json({
+            formattedResponse, 
+            countAllTasks, 
+            countAllTasksDo, 
+            countAllTasksDoing, 
+            countAllTasksDone,
+            
+            countAllTasks_user_id,
+            countAllTasksDo_user_id,
+            countAllTasksDoing_user_id,
+            countAllTasksDone_user_id
+        });
     }
 
     async show(req, res){  
         const { id } = req.params
         const user_id = req.user.id
-        let response
+        
 
-        response = await knex("tasks")
+        const response = await knex("tasks")
             .select([
                 "tasks.id",
                 "users.name",
@@ -116,7 +166,7 @@ class TasksController {
             ])
             .where("tasks.id", id)
             .innerJoin("users", "users.id", "tasks.user_id")
-            
+    
         // Converta as datas para o fuso horário de Brasília
         const formattedResponse = response.map(task => {
             if(task.updated_at) {
