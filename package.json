@@ -16,7 +16,8 @@
     "pg": "^8.11.5",
     "pm2": "^5.4.0",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "ws": "^8.18.0"
   },
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
