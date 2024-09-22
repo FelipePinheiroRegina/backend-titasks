@@ -95,6 +95,8 @@ npm run dev // development
 
 npm start // production
 ```
+<h2 align='center'>Deploy</h2>
+O projeto roda em um Ubuntu server na empresa, acessivel apenas para a rede local. utilizei bash para configurar o apache e o firewall.
 
 <h2 align='center'>Desenvolvedor</h2>
 
