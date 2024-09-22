@@ -1,9 +1,9 @@
 
-<div style="display: flex; margin-bottom: 16px;">
+<div align="center"">
     <img style="margin: auto;" src="./assets/nodedotjs.svg" alt="nodejs" width="48">
 </div>
 
-<h1 style="text-align: center;">API RESTful</h1>
+<h1 align="center"">API RESTful</h1>
 
 <p>Construida em cima da arquitetura "Model View Controller. Robusta e escalável, suporta todas as operações cruds. Parte de autenticação feita com JWT. Middlewares de segurança. Jobs de agendamento"</p>
 
