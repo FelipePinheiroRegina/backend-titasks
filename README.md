@@ -1,6 +1,6 @@
 
 <div align="center"">
-    <img style="margin: auto;" src="./assets/nodedotjs.svg" alt="nodejs" width="48">
+    <img style="margin: auto;" src="./assets/nodedotjs.svg" alt="nodejs" width="100">
 </div>
 
 <h1 align="center"">API RESTful</h1>
@@ -96,17 +96,17 @@ npm run dev // development
 npm start // production
 ```
 
-<h2>Desenvolvedor</h2>
+<h2 align='center'>Desenvolvedor</h2>
 
-<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-    <img style="border-radius: 50%;" src="./assets/feGreen.jpeg" alt="Minha imagem" width="48">
-    <strong>Felipe Pinheiro Regina</strong>
-</div>
+<img src="./assets/feGreen.jpeg" alt="Minha imagem" width="48">
 
-<div style="display: flex; align-items: center; gap: 8px;">
-    <img src="./assets/social_15707753.png" alt="linkedin" width="48">
-    <a href="https://www.linkedin.com/in/felipe-pinheiro-002427250/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-</div>
+<strong>Felipe Pinheiro Regina</strong>
+
+[LinkedIn](https://www.linkedin.com/in/felipe-pinheiro-002427250/)
+
+[Interfaces da aplicação](https://github.com/FelipePinheiroRegina/frontend-titasks)
+
+
 
 
 
