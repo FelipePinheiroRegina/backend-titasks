@@ -1,2 +1,7 @@
 node_modules
 .env
+database/*.db
+build
+tmp/uploads/*.jpeg
+tmp/uploads/*.png
+tmp/uploads/*.jpg
